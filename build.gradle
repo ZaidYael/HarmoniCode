@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'org.example.harmonicode'
-    mainClass = 'org.example.harmonicode.HelloApplication'
+    mainClass = 'org.example.harmonicode.compiladorApplication'
 }
 
 javafx {

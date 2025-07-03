@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import org.fxmisc.richtext.CodeArea?>
+<GridPane fx:id="gridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="org.example.harmonicode.Controller.compiladorController"
+          stylesheets="@Styles.css"
+          styleClass="grid-pane">
+
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="13.33"/> <!-- Encabezado -->
+        <RowConstraints percentHeight="63.33"/> <!-- Contenido -->
+        <RowConstraints percentHeight="23.33"/> <!-- Pie de página -->
+    </rowConstraints>
+
+    <children>
+        <!-- Fila 1: Encabezado con HBox -->
+        <HBox GridPane.rowIndex="0"  spacing="10" alignment="CENTER_LEFT">
+            <children>
+                <Button fx:id="btnNuevo" text="Nuevo" styleClass="Btn" onAction="#nuevoArchivo"/>
+                <Button fx:id="btnGuardar" text="Guardar" styleClass="Btn" onAction="#guardarArchivo"/>
+                <Button fx:id="btnAbrir" text="Abrir" styleClass="Btn" onAction="#abrirArchivo"/>
+                <Button fx:id="btnCompilar" text="Compilar" styleClass="Btn" onAction="#compilarCodigo"/>
+            </children>
+        </HBox>
+
+        <!-- Fila 2: Contenido principal -->
+        <CodeArea fx:id="codigoTextArea" GridPane.rowIndex="1"  wrapText="false">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </CodeArea>
+
+
+        <!-- Fila 3: Pie de página -->
+        <TextArea fx:id="texto" GridPane.rowIndex="2" promptText="Aquí se mostrarán los mensajes..." editable="false" wrapText="true" styleClass="text-area">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </TextArea>
+
+    </children>
+
+</GridPane>
