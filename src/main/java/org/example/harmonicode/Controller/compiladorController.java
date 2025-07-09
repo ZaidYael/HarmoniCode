@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
+import org.example.harmonicode.functions.Token;
+import org.example.harmonicode.functions.analizadorLexico;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -111,10 +113,19 @@ public class compiladorController {
     }
 
     @FXML
-    private void compilarCodigo() throws IOException {
-        Files.write(Paths.get("script.txt"), codigoTextArea.getText().getBytes());
-        BufferedReader br = new BufferedReader(new FileReader("scrpt.txt"));
+    private void compilarCodigo() {
+        String codigo = codigoTextArea.getText();
+        analizadorLexico analizador = new analizadorLexico();
+        var tokens = analizador.analizar(codigo);
+
+        StringBuilder salida = new StringBuilder();
+        for (Token token : tokens) {
+            salida.append(token.toString()).append("\n");
+        }
+
+        texto.setText(salida.toString());
     }
+
 
 
     @FXML
