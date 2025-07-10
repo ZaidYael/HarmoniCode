@@ -55,6 +55,7 @@ public class analizadorLexico extends Lexico {
 
             columnaActual++;
         }
+        System.out.println(tokensReconocidos);
         return tokensReconocidos;
     }
 
