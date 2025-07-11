@@ -1,6 +1,8 @@
 package org.example.harmonicode.functions;
 
-import org.example.harmonicode.functions.Token;
+import org.example.harmonicode.models.Token;
+import org.example.harmonicode.models.Tokens;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,9 @@ public class analizadorLexico extends Lexico {
 
             int columna = obtenerIndiceCaracter(c); // columna del alfabeto
             if (columna == -1) {
-                if (estadoActual != q0 && lexema.length() > 0) {
+                if (estadoActual != q0 && lexema.length() > 33) {
                     System.out.println("entra en estado de error");
-                    tokensReconocidos.add(new Token(lexema.toString(), "ERROR", fila, columnaActual));
+                    tokensReconocidos.add(new Token(lexema.toString(), Tokens.Error, fila, columnaActual));
                     lexema.setLength(0);
                     estadoActual = q0;
                 }
@@ -41,10 +43,11 @@ public class analizadorLexico extends Lexico {
                 tokensReconocidos.add(new Token(lexema.toString(), nombreToken(siguienteEstado), fila, columnaActual));
                 lexema.setLength(0);
                 estadoActual = q0;
-            } else if (siguienteEstado == 0) {
-                System.out.println("ebtra a esto");
+
+            }else if (siguienteEstado == 0) {
+                System.out.println("entra a esto");
                 if (estadoActual != q0 && lexema.length() > 0) {
-                    tokensReconocidos.add(new Token(lexema.toString(), "ERROR", fila, columnaActual));
+                    tokensReconocidos.add(new Token(lexema.toString(), Tokens.Error, fila, columnaActual));
                     lexema.setLength(0);
                 }
                 estadoActual = q0;
@@ -67,20 +70,14 @@ public class analizadorLexico extends Lexico {
         return -1;
     }
 
-    private String nombreToken(int token) {
+    private Tokens nombreToken(int token) {
         return switch (token) {
-            case 200 -> "TRANSPONER";
-            case 210 -> "INVERTIR";
-            case 220 -> "MODULAR";
-            case 230 -> "ROTAR";
-            case 240 -> "REGISTRO";
-            case 300 -> "PAR_IZQ";
-            case 310 -> "PAR_DER";
-            case 320 -> "COMA";
-            case 330 -> "ESPACIO";
-            case 340 -> "PUNTO_COMA";
-            case 350 -> "ASIGNACION";
-            default -> "DESCONOCIDO";
+            case 200, 210, 220, 230-> Tokens.Operacion;
+            case 240 -> Tokens.Declaracion;
+            case 300, 310, 320, 330, 340, 350 -> Tokens.Delimitador;
+            case 400 -> Tokens.Identificador;
+            case 500 -> Tokens.Constante;
+            default -> Tokens.Desconocido;
         };
     }
 }
