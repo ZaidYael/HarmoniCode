@@ -1,0 +1,7 @@
+registro a = b2e2;
+registro b = 4.5;
+registro c = a2.d2;
+registro aux = 4;
+
+registro discriminante = invertir(modular(b,b),modular(modular(aux,a),c));
+
