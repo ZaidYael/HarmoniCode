@@ -5,19 +5,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
-import org.example.harmonicode.functions.Token;
+import org.example.harmonicode.functions.Parser;
+import org.example.harmonicode.models.Token;
 import org.example.harmonicode.functions.analizadorLexico;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Matcher;
@@ -123,6 +121,8 @@ public class compiladorController {
             salida.append(token.toString()).append("\n");
         }
 
+        Parser parser = new Parser(tokens);
+        salida.append(parser.parse());
         texto.setText(salida.toString());
     }
 

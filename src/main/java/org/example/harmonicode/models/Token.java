@@ -1,12 +1,12 @@
-package org.example.harmonicode.functions;
+package org.example.harmonicode.models;
 
 public class Token {
     private String lexema;
-    private String tipo;
+    private Tokens tipo;
     private int fila;
     private int columna;
 
-    public Token(String lexema, String tipo, int fila, int columna) {
+    public Token(String lexema, Tokens tipo, int fila, int columna) {
         this.lexema = lexema;
         this.tipo = tipo;
         this.fila = fila;
@@ -24,7 +24,7 @@ public class Token {
     }
 
     public String getLexema() { return lexema; }
-    public String getTipo() { return tipo; }
-    public int getFila() { return fila; }
+    public Tokens getTipo() { return tipo; }
+    public int getLine() { return fila; }
     public int getColumna() { return columna; }
 }
