@@ -5,6 +5,8 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import org.fxmisc.richtext.CodeArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <GridPane fx:id="gridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="org.example.harmonicode.Controller.compiladorController"
           stylesheets="@Styles.css"
@@ -23,6 +25,11 @@
         <!-- Fila 1: Encabezado con HBox -->
         <HBox GridPane.rowIndex="0"  spacing="10" alignment="CENTER_LEFT">
             <children>
+                <ImageView fx:id="logo" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img/logoinv.png"/>
+                    </image>
+                </ImageView>
                 <Button fx:id="btnNuevo" text="Nuevo" styleClass="Btn" onAction="#nuevoArchivo"/>
                 <Button fx:id="btnGuardar" text="Guardar" styleClass="Btn" onAction="#guardarArchivo"/>
                 <Button fx:id="btnAbrir" text="Abrir" styleClass="Btn" onAction="#abrirArchivo"/>
@@ -31,7 +38,7 @@
         </HBox>
 
         <!-- Fila 2: Contenido principal -->
-        <CodeArea fx:id="codigoTextArea" GridPane.rowIndex="1"  wrapText="false">
+        <CodeArea fx:id="codigoTextArea" GridPane.rowIndex="1"  wrapText="false" styleClass="code-area" style="-fx-text-fill: white;">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
