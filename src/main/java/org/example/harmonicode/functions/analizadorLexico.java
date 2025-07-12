@@ -15,7 +15,9 @@ public class analizadorLexico extends Lexico {
 
         for (int i = 0; i < codigoFuente.length(); i++) {
             char c = codigoFuente.charAt(i);
-
+            System.out.println("c: "+c);
+            System.out.println("lexema: "+lexema);
+            System.out.println("columna actual: "+columnaActual);
             if (c == '\n') {
                 fila++;
                 columnaActual = 1;
@@ -35,8 +37,16 @@ public class analizadorLexico extends Lexico {
             }
 
             int siguienteEstado = matrizTransicion[estadoActual][columna];
+            System.out.println("Sig. estado: "+siguienteEstado);
 
-            if (siguienteEstado >= 200) {
+
+            if ((siguienteEstado >= 200 && siguienteEstado <300) ||
+                    (siguienteEstado >= 400)) {
+                tokensReconocidos.add(new Token(lexema.toString(), nombreToken(siguienteEstado), fila, columnaActual));
+                lexema.setLength(0);
+                estadoActual = q0;
+                i--;
+            } else if (siguienteEstado >= 300) {
                 lexema.append(c);
                 tokensReconocidos.add(new Token(lexema.toString(), nombreToken(siguienteEstado), fila, columnaActual));
                 lexema.setLength(0);
@@ -78,7 +88,10 @@ public class analizadorLexico extends Lexico {
             case 320 -> "COMA";
             case 330 -> "ESPACIO";
             case 340 -> "PUNTO_COMA";
+            case 345 -> "PUNTO";
             case 350 -> "ASIGNACION";
+            case 400 -> "IDENTIFICADOR";
+            case 500 -> "CONSTANTE";
             default -> "DESCONOCIDO";
         };
     }
