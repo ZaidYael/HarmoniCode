@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import org.example.harmonicode.functions.Parser;
+import org.example.harmonicode.functions.Semantico;
 import org.example.harmonicode.models.Token;
 import org.example.harmonicode.functions.analizadorLexico;
 import org.fxmisc.richtext.CodeArea;
@@ -71,7 +72,7 @@ public class compiladorController {
 
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Archivos de texto", "*.txt"),
-                new FileChooser.ExtensionFilter("Archivos fuente", "*.harmoni")
+                new FileChooser.ExtensionFilter("Archivos fuente", "*.hm")
         );
 
         File archivoSeleccionado = fileChooser.showOpenDialog(codigoTextArea.getScene().getWindow());
@@ -91,7 +92,7 @@ public class compiladorController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar archivo de código");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Archivos .harmoni", "*.harmoni")
+                new FileChooser.ExtensionFilter("Archivos .harmoni", "*.hm")
         );
 
         File archivoGuardar = fileChooser.showSaveDialog(codigoTextArea.getScene().getWindow());
@@ -113,17 +114,32 @@ public class compiladorController {
     @FXML
     private void compilarCodigo() {
         String codigo = codigoTextArea.getText();
+
+        // Análisis léxico
         analizadorLexico analizador = new analizadorLexico();
         var tokens = analizador.analizar(codigo);
 
         StringBuilder salida = new StringBuilder();
+
+        // Mostrar tokens
+        salida.append("=== ANÁLISIS LÉXICO ===\n");
         for (Token token : tokens) {
             salida.append(token.toString()).append("\n");
         }
+        salida.append("\n");
 
+        // Análisis sintáctico
+        salida.append("=== ANÁLISIS SINTÁCTICO ===\n");
         Parser parser = new Parser(tokens);
         salida.append(parser.parse());
+        salida.append("\n");
+
+        // Análisis semántico
+        Semantico semantico = new Semantico();
+        salida.append(semantico.analizar(tokens));
+
         texto.setText(salida.toString());
+
     }
 
 
