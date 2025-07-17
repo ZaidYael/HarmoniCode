@@ -48,7 +48,6 @@ public class Parser {
         }
     }
 
-
     private String parseDeclaration() {
         System.out.println("Entra a parseDeclaration");
         Token type = advance();
@@ -140,4 +139,6 @@ public class Parser {
         current ++;
         return new RuntimeException("Error en línea " + token.getLine() + ": " + message);
     }
+
+
 }

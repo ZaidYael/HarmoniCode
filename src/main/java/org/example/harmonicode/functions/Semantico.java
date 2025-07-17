@@ -49,19 +49,19 @@ public class Semantico {
 
         // Análisis en dos pasadas
         // Primera pasada: recolectar declaraciones
-        primeraPassada(tokens);
+        primeraPasada(tokens);
 
         // Segunda pasada: verificar uso de variables y operaciones
-        segundaPassada(tokens);
+        segundaPasada(tokens);
 
         // Mostrar tabla de símbolos
         mostrarTablaSimbolos();
 
         // Resumen final
         if (erroresSemanticos == 0) {
-            resultado.append("\n✅ Análisis semántico completado sin errores.\n");
+            resultado.append("\nAnálisis semántico completado sin errores.\n");
         } else {
-            resultado.append(String.format("\n❌ Análisis semántico completado con %d error(es).\n", erroresSemanticos));
+            resultado.append(String.format("\nAnálisis semántico completado con %d error(es).\n", erroresSemanticos));
         }
 
         return resultado.toString();
@@ -70,7 +70,7 @@ public class Semantico {
     /**
      * Primera pasada: recolectar todas las declaraciones de variables
      */
-    private void primeraPassada(List<Token> tokens) {
+    private void primeraPasada(List<Token> tokens) {
         resultado.append("--- PRIMERA PASADA: RECOLECCIÓN DE DECLARACIONES ---\n");
 
         for (int i = 0; i < tokens.size(); i++) {
@@ -87,7 +87,7 @@ public class Semantico {
     /**
      * Segunda pasada: verificar uso de variables y operaciones
      */
-    private void segundaPassada(List<Token> tokens) {
+    private void segundaPasada(List<Token> tokens) {
         resultado.append("--- SEGUNDA PASADA: VERIFICACIÓN DE USO ---\n");
         for (int i = 0; i < tokens.size(); i++) {
             Token token = tokens.get(i);
@@ -147,7 +147,7 @@ public class Semantico {
             Variable nuevaVariable = new Variable(nombreVariable, "registro", valor, nombreToken.getLine());
             tablaSimbolos.put(nombreVariable, nuevaVariable);
 
-            resultado.append(String.format("✅ Variable '%s' declarada correctamente con valor %s (línea %d)\n",
+            resultado.append(String.format("Variable '%s' declarada correctamente con valor %s (línea %d)\n",
                     nombreVariable, valor, nombreToken.getLine()));
 
         } catch (Exception e) {
@@ -219,7 +219,7 @@ public class Semantico {
 
             // Verificar compatibilidad de tipos para la operación
             if (validarOperacion(tipoOperacion, variable1, variable2, operacionToken)) {
-                resultado.append(String.format("✅ Operación '%s(%s, %s)' es válida (línea %d)\n",
+                resultado.append(String.format("Operación '%s(%s, %s)' es válida (línea %d)\n",
                         tipoOperacion, var1, var2, operacionToken.getLine()));
             }
 
@@ -354,8 +354,13 @@ public class Semantico {
      */
     private Object validarConstante(Token token) {
         String valor = token.getLexema();
-
+        System.out.println("VAlor: "+valor);
         try {
+            boolean v=Character.isDigit(valor.charAt(0));
+            System.out.println("V: "+v);
+            System.out.println("valor.chatAt(0): "+valor.charAt(0));
+            if(!v)valor=decodificar(valor);
+            System.out.println("Valor2: "+valor);
             // Intentar parsear como número decimal
             if (valor.contains(".")) {
                 return Double.parseDouble(valor);
@@ -398,7 +403,7 @@ public class Semantico {
      */
     private void agregarError(Token token, String mensaje) {
         erroresSemanticos++;
-        resultado.append(String.format("❌ ERROR línea %d: %s\n", token.getLine(), mensaje));
+        resultado.append(String.format("ERROR línea %d: %s\n", token.getLine(), mensaje));
     }
 
     /**
@@ -424,5 +429,38 @@ public class Semantico {
                     var.inicializada ? "Sí" : "No",
                     var.lineaDeclaracion));
         }
+    }
+
+    private String decodificar(String encrypted) {
+        // Mapa de notas musicales a sus valores
+        java.util.Map<Character, Integer> noteMap = new java.util.HashMap<>();
+        noteMap.put('c', 1);
+        noteMap.put('d', 2);
+        noteMap.put('e', 3);
+        noteMap.put('f', 4);
+        noteMap.put('g', 5);
+        noteMap.put('a', 6);
+        noteMap.put('b', 7);
+
+        StringBuilder result = new StringBuilder();
+        char note;
+        int octava,noteValue,product;
+        //encrypted+="ZZ";
+        for (int i = 0; i < encrypted.length(); i++) {
+            note = encrypted.charAt(i);
+            octava = Character.getNumericValue(encrypted.charAt(i + 1));
+            noteValue = noteMap.getOrDefault(note, 0);
+            System.out.println("note,octava,value: "+note+","+octava+","+noteValue);
+            if(octava >= 10 || octava <= 0){
+                if(noteValue == 1)product=0;
+                else return "ERROR Cte numerica no valida";
+            }else{
+                product = noteValue * octava;
+                i++;
+            }
+            result.append(product);
+        }
+
+        return result.toString();
     }
 }

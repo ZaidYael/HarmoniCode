@@ -101,7 +101,7 @@ public class compiladorController {
             try {
                 String filePath = archivoGuardar.getAbsolutePath();
                 if (!filePath.endsWith(".harmoni")) {
-                    archivoGuardar = new File(filePath + ".harmoni");
+                    archivoGuardar = new File(filePath + ".hm");
                 }
 
                 Files.writeString(archivoGuardar.toPath(), codigoTextArea.getText());
@@ -148,4 +148,7 @@ public class compiladorController {
     private void nuevoArchivo() {
         codigoTextArea.clear();
     }
+
+
 }
+

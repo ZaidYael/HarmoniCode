@@ -9,6 +9,7 @@ import java.util.List;
 public class analizadorLexico extends Lexico {
 
     public List<Token> analizar(String codigoFuente) {
+        codigoFuente = codigoFuente.toLowerCase();
         List<Token> tokensReconocidos = new ArrayList<>();
         int estadoActual = q0;
         StringBuilder lexema = new StringBuilder();
