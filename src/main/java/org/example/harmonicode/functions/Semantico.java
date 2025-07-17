@@ -448,17 +448,23 @@ public class Semantico {
         //encrypted+="ZZ";
         for (int i = 0; i < encrypted.length(); i++) {
             note = encrypted.charAt(i);
-            octava = Character.getNumericValue(encrypted.charAt(i + 1));
-            noteValue = noteMap.getOrDefault(note, 0);
-            System.out.println("note,octava,value: "+note+","+octava+","+noteValue);
-            if(octava >= 10 || octava <= 0){
-                if(noteValue == 1)product=0;
-                else return "ERROR Cte numerica no valida";
-            }else{
-                product = noteValue * octava;
-                i++;
+            if(note == '.')result.append('.');
+            else {
+                if ((i + 1) >= encrypted.length()) {
+                    octava = 35;
+                } else {
+                    octava = Character.getNumericValue(encrypted.charAt(i + 1));
+                }
+                noteValue = noteMap.getOrDefault(note, 0);
+                if (octava >= 10 || octava <= 0) {
+                    if (noteValue == 1) product = 0;
+                    else return "ERROR Cte numerica no valida";
+                } else {
+                    product = noteValue * octava;
+                    i++;
+                }
+                result.append(product);
             }
-            result.append(product);
         }
 
         return result.toString();
