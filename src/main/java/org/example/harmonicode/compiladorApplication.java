@@ -16,6 +16,7 @@ public class compiladorApplication extends Application {
         stage.setTitle("HarmoniCode");
         stage.setScene(scene);
         //CARGAR LOGO
+        stage.setMaximized(true);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("img/hclogo.png")));
         stage.show();
     }

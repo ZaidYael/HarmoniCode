@@ -30,6 +30,7 @@ public class compiladorController {
     @FXML private Button btnAbrir;
     @FXML private Button btnGuardar;
     @FXML private Button btnCompilar;
+    @FXML private Button btnEjecutar;
     @FXML private TextArea texto;
     @FXML private TextArea lexicoArea;
     @FXML private TextArea sintacticoArea;
@@ -38,6 +39,8 @@ public class compiladorController {
 
     @FXML 
     public void initialize() {
+        btnEjecutar.setVisible(false);
+
         codigoTextArea.setParagraphGraphicFactory(LineNumberFactory.get(codigoTextArea));
 
         codigoTextArea.textProperty().addListener((obs, oldText, newText) -> {
@@ -116,8 +119,8 @@ public class compiladorController {
     }
     @FXML
     private void compilarCodigo() {
-        String codigo = codigoTextArea.getText();
 
+        String codigo = codigoTextArea.getText();
         analizadorLexico analizador = new analizadorLexico();
         var tokens = analizador.analizar(codigo);
 
@@ -136,6 +139,9 @@ public class compiladorController {
         // ANÁLISIS SEMÁNTICO
         Semantico semantico = new Semantico();
         String semanticoStr = semantico.analizar(tokens);
+        if (!semantico.state){
+            btnEjecutar.setVisible(true);
+        }
         semanticoArea.setText(semanticoStr);
 
         // RESULTADO COMPLETO

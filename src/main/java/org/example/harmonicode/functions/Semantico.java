@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Semantico {
-
+    public boolean  state = false;
     // Tabla de símbolos para almacenar variables declaradas
     private final Map<String, Variable> tablaSimbolos = new HashMap<>();
 
@@ -60,7 +60,9 @@ public class Semantico {
         // Resumen final
         if (erroresSemanticos == 0) {
             resultado.append("\nAnálisis semántico completado sin errores.\n");
+            state = true;
         } else {
+
             resultado.append(String.format("\nAnálisis semántico completado con %d error(es).\n", erroresSemanticos));
         }
 

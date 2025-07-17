@@ -7,25 +7,24 @@
 <?import javafx.scene.layout.*?>
 <?import org.fxmisc.richtext.CodeArea?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+<BorderPane styleClass="borderPane" xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.example.harmonicode.Controller.compiladorController"
-            stylesheets="@Styles.css"
-            style="-fx-background-color: #1e1e1e;">
+            stylesheets="@Styles.css">
 
     <!-- TOP -->
     <top>
         <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
-            <ImageView fitHeight="30" fitWidth="30">
+            <ImageView fitHeight="80" fitWidth="90">
                 <image>
                     <Image url="@img/logoinv.png"/>
                 </image>
             </ImageView>
-            <Button fx:id="btnNuevo" text="Nuevo" onAction="#nuevoArchivo"/>
-            <Button fx:id="btnGuardar" text="Guardar" onAction="#guardarArchivo"/>
-            <Button fx:id="btnAbrir" text="Abrir" onAction="#abrirArchivo"/>
-            <Button fx:id="btnCompilar" text="Compilar" onAction="#compilarCodigo"/>
-            <Button text="Ejecutar"/> <!-- Aún sin funcionalidad -->
+            <Button styleClass="Btn" fx:id="btnNuevo" text="Nuevo" onAction="#nuevoArchivo"/>
+            <Button styleClass="Btn" fx:id="btnGuardar" text="Guardar" onAction="#guardarArchivo"/>
+            <Button styleClass="Btn" fx:id="btnAbrir" text="Abrir" onAction="#abrirArchivo"/>
+            <Button styleClass="Btn" fx:id="btnCompilar" text="Compilar" onAction="#compilarCodigo"/>
+            <Button styleClass="Btn" fx:id="btnEjecutar" text="Ejecutar"/> <!-- Aún sin funcionalidad -->
         </HBox>
     </top>
 
@@ -38,12 +37,12 @@
             </columnConstraints>
 
             <!-- Etiqueta de Código -->
-            <Label text="Codigo:" style="-fx-text-fill: #ffffff;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label text="Codigo:"  styleClass="label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
             <!-- Área de Código -->
             <CodeArea fx:id="codigoTextArea"
                       GridPane.columnIndex="0" GridPane.rowIndex="1"
-                      prefHeight="300"
+                      prefHeight="350"
                       style="-fx-font-family: 'Consolas'; -fx-font-size: 14px; -fx-background-color: #e0e0e0;"
                       wrapText="true"/>
 
@@ -51,19 +50,19 @@
             <Label text="Análisis Léxico:" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
             <TextArea fx:id="lexicoArea" editable="false" wrapText="true"
                       GridPane.columnIndex="1" GridPane.rowIndex="1"
-                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="90"/>
+                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="120"/>
 
             <!-- Análisis Sintáctico -->
             <Label text="Análisis Sintáctico:" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
             <TextArea fx:id="sintacticoArea" editable="false" wrapText="true"
                       GridPane.columnIndex="1" GridPane.rowIndex="3"
-                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="90"/>
+                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="120"/>
 
             <!-- Análisis Semántico -->
             <Label text="Análisis Semántico:" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
             <TextArea fx:id="semanticoArea" editable="false" wrapText="true"
                       GridPane.columnIndex="1" GridPane.rowIndex="5"
-                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="90"/>
+                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="120"/>
 
             <!-- Resultado -->
             <Label text="Resultado" style="-fx-text-fill: white;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>

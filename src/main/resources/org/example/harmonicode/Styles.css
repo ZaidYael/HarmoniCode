@@ -3,22 +3,35 @@
     -fx-padding: 20;
     -fx-background-color: #1e1e1e; /* Fondo oscuro monocromático */
 }
-
+.borderPane{
+    -fx-background-color: #1e1e1e; /* Fondo oscuro monocromático */
+}
 .Btn {
-    -fx-background-color: #2d2d2d; /* Fondo oscuro para botones */
-    -fx-background-radius: 10; /* Bordes redondeados más sutiles */
-    -fx-border-radius: 10;
-    -fx-border-color: #3c3c3c; /* Borde ligeramente más claro */
+    -fx-background-color: #ffffff; /* Fondo blanco */
+    -fx-background-radius: 30px; /* Bordes redondeados */
+    -fx-border-radius: 30px;
     -fx-border-width: 1;
+    -fx-border-color: #d4d4d4; /* Borde gris claro */
 
-    -fx-text-fill: #ffffff; /* Texto blanco */
-    -fx-font-family: "Segoe UI"; /* Fuente moderna */
+    -fx-text-fill: #000000; /* Texto negro */
+
+    -fx-font-family: SansSerif; /* Fuente moderna */
+    -fx-font-weight: Bold; /* Texto en negrita */
     -fx-font-size: 14px;
 
     -fx-padding: 6 13 6 13;
     -fx-cursor: hand;
 }
 
+.label{
+    -fx-text-fill: #ffffff;
+    -fx-font-family: SansSerif; /* Fuente moderna */
+    -fx-font-weight: Bold; /* Texto en negrita */
+}
+.Btn:hover {
+    -fx-background-color: #000000; /* Fondo negro al hacer hover */
+    -fx-text-fill: #ffffff; /* Texto blanco al hacer hover */
+}
 .code-area {
     -fx-background-color: #e8e8e8; /* Fondo oscuro */
     -fx-text-fill: #ffffff; /* Texto blanco */
