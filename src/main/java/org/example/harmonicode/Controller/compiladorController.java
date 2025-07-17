@@ -31,6 +31,10 @@ public class compiladorController {
     @FXML private Button btnGuardar;
     @FXML private Button btnCompilar;
     @FXML private TextArea texto;
+    @FXML private TextArea lexicoArea;
+    @FXML private TextArea sintacticoArea;
+    @FXML private TextArea semanticoArea;
+
 
     @FXML 
     public void initialize() {
@@ -110,36 +114,32 @@ public class compiladorController {
             }
         }
     }
-
     @FXML
     private void compilarCodigo() {
         String codigo = codigoTextArea.getText();
 
-        // Análisis léxico
         analizadorLexico analizador = new analizadorLexico();
         var tokens = analizador.analizar(codigo);
 
-        StringBuilder salida = new StringBuilder();
-
-        // Mostrar tokens
-        salida.append("=== ANÁLISIS LÉXICO ===\n");
+        // ANÁLISIS LÉXICO
+        StringBuilder lexico = new StringBuilder();
         for (Token token : tokens) {
-            salida.append(token.toString()).append("\n");
+            lexico.append(token.toString()).append("\n");
         }
-        salida.append("\n");
+        lexicoArea.setText(lexico.toString());
 
-        // Análisis sintáctico
-        salida.append("=== ANÁLISIS SINTÁCTICO ===\n");
+        // ANÁLISIS SINTÁCTICO
         Parser parser = new Parser(tokens);
-        salida.append(parser.parse());
-        salida.append("\n");
+        String sintactico = parser.parse();
+        sintacticoArea.setText(sintactico);
 
-        // Análisis semántico
+        // ANÁLISIS SEMÁNTICO
         Semantico semantico = new Semantico();
-        salida.append(semantico.analizar(tokens));
+        String semanticoStr = semantico.analizar(tokens);
+        semanticoArea.setText(semanticoStr);
 
-        texto.setText(salida.toString());
-
+        // RESULTADO COMPLETO
+        texto.setText("Compilación finalizada.");
     }
 
 
@@ -148,7 +148,6 @@ public class compiladorController {
     private void nuevoArchivo() {
         codigoTextArea.clear();
     }
-
 
 }
 

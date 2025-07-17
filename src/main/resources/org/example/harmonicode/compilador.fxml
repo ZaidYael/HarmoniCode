@@ -1,57 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
-<?import org.fxmisc.richtext.CodeArea?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<GridPane fx:id="gridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="org.example.harmonicode.Controller.compiladorController"
-          stylesheets="@Styles.css"
-          styleClass="grid-pane">
+<?import javafx.scene.layout.*?>
+<?import org.fxmisc.richtext.CodeArea?>
 
-    <columnConstraints>
-        <ColumnConstraints percentWidth="100"/>
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints percentHeight="13.33"/> <!-- Encabezado -->
-        <RowConstraints percentHeight="63.33"/> <!-- Contenido -->
-        <RowConstraints percentHeight="23.33"/> <!-- Pie de página -->
-    </rowConstraints>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.harmonicode.Controller.compiladorController"
+            stylesheets="@Styles.css"
+            style="-fx-background-color: #1e1e1e;">
 
-    <children>
-        <!-- Fila 1: Encabezado con HBox -->
-        <HBox GridPane.rowIndex="0"  spacing="10" alignment="CENTER_LEFT">
-            <children>
-                <ImageView fx:id="logo" fitHeight="50" fitWidth="50" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@img/logoinv.png"/>
-                    </image>
-                </ImageView>
-                <Button fx:id="btnNuevo" text="Nuevo" styleClass="Btn" onAction="#nuevoArchivo"/>
-                <Button fx:id="btnGuardar" text="Guardar" styleClass="Btn" onAction="#guardarArchivo"/>
-                <Button fx:id="btnAbrir" text="Abrir" styleClass="Btn" onAction="#abrirArchivo"/>
-                <Button fx:id="btnCompilar" text="Compilar" styleClass="Btn" onAction="#compilarCodigo"/>
-            </children>
+    <!-- TOP -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <ImageView fitHeight="30" fitWidth="30">
+                <image>
+                    <Image url="@img/logoinv.png"/>
+                </image>
+            </ImageView>
+            <Button fx:id="btnNuevo" text="Nuevo" onAction="#nuevoArchivo"/>
+            <Button fx:id="btnGuardar" text="Guardar" onAction="#guardarArchivo"/>
+            <Button fx:id="btnAbrir" text="Abrir" onAction="#abrirArchivo"/>
+            <Button fx:id="btnCompilar" text="Compilar" onAction="#compilarCodigo"/>
+            <Button text="Ejecutar"/> <!-- Aún sin funcionalidad -->
         </HBox>
+    </top>
 
-        <!-- Fila 2: Contenido principal -->
-        <CodeArea fx:id="codigoTextArea" GridPane.rowIndex="1"  wrapText="false" styleClass="code-area" style="-fx-text-fill: white;">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-        </CodeArea>
+    <!-- CENTER -->
+    <center>
+        <GridPane hgap="10" vgap="10" style="-fx-padding: 10;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="60"/>
+                <ColumnConstraints percentWidth="40"/>
+            </columnConstraints>
 
+            <!-- Etiqueta de Código -->
+            <Label text="Codigo:" style="-fx-text-fill: #ffffff;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
-        <!-- Fila 3: Pie de página -->
-        <TextArea fx:id="texto" GridPane.rowIndex="2" promptText="Aquí se mostrarán los mensajes..." editable="false" wrapText="true" styleClass="text-area">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-        </TextArea>
+            <!-- Área de Código -->
+            <CodeArea fx:id="codigoTextArea"
+                      GridPane.columnIndex="0" GridPane.rowIndex="1"
+                      prefHeight="300"
+                      style="-fx-font-family: 'Consolas'; -fx-font-size: 14px; -fx-background-color: #e0e0e0;"
+                      wrapText="true"/>
 
-    </children>
+            <!-- Análisis Léxico -->
+            <Label text="Análisis Léxico:" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <TextArea fx:id="lexicoArea" editable="false" wrapText="true"
+                      GridPane.columnIndex="1" GridPane.rowIndex="1"
+                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="90"/>
 
-</GridPane>
+            <!-- Análisis Sintáctico -->
+            <Label text="Análisis Sintáctico:" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextArea fx:id="sintacticoArea" editable="false" wrapText="true"
+                      GridPane.columnIndex="1" GridPane.rowIndex="3"
+                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="90"/>
+
+            <!-- Análisis Semántico -->
+            <Label text="Análisis Semántico:" style="-fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            <TextArea fx:id="semanticoArea" editable="false" wrapText="true"
+                      GridPane.columnIndex="1" GridPane.rowIndex="5"
+                      style="-fx-control-inner-background: black; -fx-text-fill: white;" prefHeight="90"/>
+
+            <!-- Resultado -->
+            <Label text="Resultado" style="-fx-text-fill: white;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextArea fx:id="texto" editable="false" wrapText="true"
+                      GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.rowSpan="3"
+                      style="-fx-control-inner-background: #222; -fx-text-fill: white;" prefHeight="150"/>
+        </GridPane>
+    </center>
+</BorderPane>
