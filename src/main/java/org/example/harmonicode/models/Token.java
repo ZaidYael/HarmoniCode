@@ -25,6 +25,6 @@ public class Token {
 
     public String getLexema() { return lexema; }
     public Tokens getTipo() { return tipo; }
-    public int getLine() { return fila; }
+    public int getFila() { return fila; }
     public int getColumna() { return columna; }
 }

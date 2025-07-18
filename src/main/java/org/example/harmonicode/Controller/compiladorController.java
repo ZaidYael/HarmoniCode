@@ -1,9 +1,11 @@
 package org.example.harmonicode.Controller;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import org.example.harmonicode.functions.Parser;
 import org.example.harmonicode.functions.Semantico;
@@ -25,27 +27,34 @@ import java.util.regex.Pattern;
 public class compiladorController {
     @FXML
     private Label welcomeText;
+    Semantico semantico = new Semantico();
     @FXML private CodeArea codigoTextArea;
     @FXML private Button btnNuevo;
     @FXML private Button btnAbrir;
     @FXML private Button btnGuardar;
     @FXML private Button btnCompilar;
     @FXML private Button btnEjecutar;
-    @FXML private TextArea texto;
+    @FXML private TextArea resultado;
     @FXML private TextArea lexicoArea;
     @FXML private TextArea sintacticoArea;
     @FXML private TextArea semanticoArea;
 
 
+
     @FXML 
     public void initialize() {
-        btnEjecutar.setVisible(false);
+        btnEjecutar.setDisable(true);
 
         codigoTextArea.setParagraphGraphicFactory(LineNumberFactory.get(codigoTextArea));
 
         codigoTextArea.textProperty().addListener((obs, oldText, newText) -> {
             codigoTextArea.setStyleSpans(0, computeHighlighting(newText));
         });
+        EventHandler<KeyEvent> keyEventHandler = event -> {
+            btnEjecutar.setDisable(true);
+        };
+
+        codigoTextArea.addEventHandler(KeyEvent.KEY_PRESSED, keyEventHandler);
     }
 
     //Esto es para remarcar las palabras reservadas
@@ -76,6 +85,8 @@ public class compiladorController {
     private void abrirArchivo() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Abrir archivo de código");
+        File directorioInicial = new File("./src");
+        fileChooser.setInitialDirectory(directorioInicial);
 
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Archivos de texto", "*.txt"),
@@ -98,6 +109,8 @@ public class compiladorController {
     private void guardarArchivo() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar archivo de código");
+        File dirInicial = new File(".");
+        fileChooser.setInitialDirectory(dirInicial);
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Archivos .harmoni", "*.hm")
         );
@@ -126,8 +139,15 @@ public class compiladorController {
 
         // ANÁLISIS LÉXICO
         StringBuilder lexico = new StringBuilder();
+        lexico.append(String.format("%-15s %-15s %-5s %-7s%n", "Lexema", "Tipo", "Fila", "Columna"));
+        lexico.append("-------------------------------------------------------\n");
         for (Token token : tokens) {
-            lexico.append(token.toString()).append("\n");
+            lexico.append(String.format("%-15s %-15s %-5d %-7d%n",
+                    token.getLexema(),
+                    token.getTipo(),
+                    token.getFila(),
+                    token.getColumna()
+            ));
         }
         lexicoArea.setText(lexico.toString());
 
@@ -137,23 +157,30 @@ public class compiladorController {
         sintacticoArea.setText(sintactico);
 
         // ANÁLISIS SEMÁNTICO
-        Semantico semantico = new Semantico();
+
+        semantico.ejecucion.setLength(0);
         String semanticoStr = semantico.analizar(tokens);
-        if (!semantico.state){
-            btnEjecutar.setVisible(true);
-        }
+        btnEjecutar.setDisable(!semantico.state);
         semanticoArea.setText(semanticoStr);
 
         // RESULTADO COMPLETO
-        texto.setText("Compilación finalizada.");
+
     }
-
-
 
     @FXML
     private void nuevoArchivo() {
         codigoTextArea.clear();
+        resultado.clear();
+        lexicoArea.clear();
+        sintacticoArea.clear();
+        semanticoArea.clear();
     }
 
+    @FXML
+    private void ejecutarCodigo(){
+        String text = semantico.ejecucion.toString();
+        System.out.println(semantico.ejecucion.toString());
+        resultado.setText(text);
+    }
 }
 

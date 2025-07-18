@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class Semantico {
     public boolean  state = false;
+    public StringBuilder ejecucion = new StringBuilder();
+
     // Tabla de símbolos para almacenar variables declaradas
     private final Map<String, Variable> tablaSimbolos = new HashMap<>();
 
@@ -45,8 +47,6 @@ public class Semantico {
         tablaSimbolos.clear();
         erroresSemanticos = 0;
 
-        resultado.append("=== ANÁLISIS SEMÁNTICO ===\n\n");
-
         // Análisis en dos pasadas
         // Primera pasada: recolectar declaraciones
         primeraPasada(tokens);
@@ -62,7 +62,7 @@ public class Semantico {
             resultado.append("\nAnálisis semántico completado sin errores.\n");
             state = true;
         } else {
-
+            state=false;
             resultado.append(String.format("\nAnálisis semántico completado con %d error(es).\n", erroresSemanticos));
         }
 
@@ -146,11 +146,11 @@ public class Semantico {
             }
 
             // Agregar variable a la tabla de símbolos
-            Variable nuevaVariable = new Variable(nombreVariable, "registro", valor, nombreToken.getLine());
+            Variable nuevaVariable = new Variable(nombreVariable, "registro", valor, nombreToken.getFila());
             tablaSimbolos.put(nombreVariable, nuevaVariable);
 
             resultado.append(String.format("Variable '%s' declarada correctamente con valor %s (línea %d)\n",
-                    nombreVariable, valor, nombreToken.getLine()));
+                    nombreVariable, valor, nombreToken.getFila()));
 
         } catch (Exception e) {
             agregarError(tokens.get(index), "Error al procesar declaración: " + e.getMessage());
@@ -218,12 +218,10 @@ public class Semantico {
                 agregarError(param2, String.format("Variable '%s' no ha sido inicializada", var2));
                 return;
             }
-
-            // Verificar compatibilidad de tipos para la operación
-            if (validarOperacion(tipoOperacion, variable1, variable2, operacionToken)) {
-                resultado.append(String.format("Operación '%s(%s, %s)' es válida (línea %d)\n",
-                        tipoOperacion, var1, var2, operacionToken.getLine()));
-            }
+            // Llenar la ejecucion
+            validarOperacion(tipoOperacion, variable1, variable2, operacionToken);
+            resultado.append(String.format("Operación '%s(%s, %s)' es válida (línea %d)\n",
+                    tipoOperacion, var1, var2, operacionToken.getFila()));
 
         } catch (Exception e) {
             agregarError(tokens.get(index), "Error al procesar operación: " + e.getMessage());
@@ -233,19 +231,24 @@ public class Semantico {
     /**
      * Validar una operación específica con sus parámetros
      */
-    private boolean validarOperacion(String operacion, Variable var1, Variable var2, Token token) {
+    private void validarOperacion(String operacion, Variable var1, Variable var2, Token token) {
+        double valor1=Double.parseDouble(var1.valor.toString());
+        double valor2=Double.parseDouble(var2.valor.toString());
         switch (operacion) {
             case "transponer":
-                return validarTransponer(var1, var2, token);
+                ejecucion.append(String.valueOf(valor1+valor2)+"\n");
+                break;
             case "invertir":
-                return validarInvertir(var1, var2, token);
+                ejecucion.append(String.valueOf(valor1-valor2)+"\n");
+                break;
             case "modular":
-                return validarModular(var1, var2, token);
+                ejecucion.append(String.valueOf(valor1*valor2)+"\n");
+                break;
             case "rotar":
-                return validarRotar(var1, var2, token);
+                ejecucion.append(String.valueOf(valor1/valor2)+"\n");
+                break;
             default:
                 agregarError(token, "Operación desconocida: " + operacion);
-                return false;
         }
     }
 
@@ -262,17 +265,7 @@ public class Semantico {
         double nota = (Double) var1.valor;
         double intervalo = (Double) var2.valor;
 
-        // Validar rango de notas (0-11 para notas cromáticas)
-        if (nota < 0 || nota > 127) { // Rango MIDI
-            agregarError(token, String.format("Nota fuera de rango válido (0-127): %.1f", nota));
-            return false;
-        }
 
-        // Validar intervalo razonable
-        if (Math.abs(intervalo) > 48) { // Máximo 4 octavas
-            agregarError(token, String.format("Intervalo demasiado grande: %.1f", intervalo));
-            return false;
-        }
 
         return true;
     }
@@ -356,13 +349,10 @@ public class Semantico {
      */
     private Object validarConstante(Token token) {
         String valor = token.getLexema();
-        System.out.println("VAlor: "+valor);
+
         try {
             boolean v=Character.isDigit(valor.charAt(0));
-            System.out.println("V: "+v);
-            System.out.println("valor.chatAt(0): "+valor.charAt(0));
             if(!v)valor=decodificar(valor);
-            System.out.println("Valor2: "+valor);
             // Intentar parsear como número decimal
             if (valor.contains(".")) {
                 return Double.parseDouble(valor);
@@ -405,7 +395,7 @@ public class Semantico {
      */
     private void agregarError(Token token, String mensaje) {
         erroresSemanticos++;
-        resultado.append(String.format("ERROR línea %d: %s\n", token.getLine(), mensaje));
+        resultado.append(String.format("ERROR línea %d: %s\n", token.getFila(), mensaje));
     }
 
     /**
