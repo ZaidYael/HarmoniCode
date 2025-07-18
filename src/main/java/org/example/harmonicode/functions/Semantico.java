@@ -59,11 +59,10 @@ public class Semantico {
 
         // Resumen final
         if (erroresSemanticos == 0) {
-            resultado.append("\nAnálisis semántico completado sin errores.\n");
             state = true;
         } else {
             state=false;
-            resultado.append(String.format("\nAnálisis semántico completado con %d error(es).\n", erroresSemanticos));
+            resultado.append(String.format("", erroresSemanticos));
         }
 
         return resultado.toString();

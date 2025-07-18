@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class analizadorLexico extends Lexico {
-
+    public boolean state =false;
     public List<Token> analizar(String codigoFuente) {
+        state =true;
         codigoFuente = codigoFuente.toLowerCase();
         List<Token> tokensReconocidos = new ArrayList<>();
         int estadoActual = q0;
@@ -28,10 +29,10 @@ public class analizadorLexico extends Lexico {
             int columna = obtenerIndiceCaracter(c); // columna del alfabeto
             if (columna == -1) {
                 if (estadoActual != q0 && lexema.length() > 33) {
-                    System.out.println("entra en estado de error");
                     tokensReconocidos.add(new Token(lexema.toString(), Tokens.Error, fila, columnaActual));
                     lexema.setLength(0);
                     estadoActual = q0;
+                    state =false;
                 }
                 columnaActual++;
                 continue;
@@ -50,10 +51,10 @@ public class analizadorLexico extends Lexico {
                 tokensReconocidos.add(new Token(lexema.toString(), nombreToken(siguienteEstado), fila, columnaActual));
                 lexema.setLength(0);
             }else if (siguienteEstado == 0) {
-                System.out.println("entra a esto");
                 if (estadoActual != q0 && lexema.length() > 0) {
                     tokensReconocidos.add(new Token(lexema.toString(), Tokens.Error, fila, columnaActual));
                     lexema.setLength(0);
+                    state =false;
                 }
                 estadoActual = q0;
             } else {

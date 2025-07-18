@@ -32,8 +32,8 @@
     <center>
         <GridPane hgap="10" vgap="10" style="-fx-padding: 10;">
             <columnConstraints>
-                <ColumnConstraints percentWidth="60"/>
-                <ColumnConstraints percentWidth="40"/>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
             </columnConstraints>
 
             <!-- Etiqueta de Código -->
@@ -43,7 +43,7 @@
             <CodeArea fx:id="codigoTextArea"
                       GridPane.columnIndex="0" GridPane.rowIndex="1"
                       prefHeight="350"
-                      style="-fx-font-family: 'Consolas'; -fx-font-size: 14px; -fx-background-color: #e0e0e0;"
+                      style="-fx-font-family: 'Consolas'; -fx-font-size: 20px; -fx-background-color: #e0e0e0;"
                       wrapText="true"/>
 
             <!-- Análisis Léxico -->
@@ -67,7 +67,7 @@
             <!-- Resultado -->
             <Label text="Resultado" style="-fx-text-fill: white;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
             <TextArea fx:id="resultado" editable="false" wrapText="true"
-                      GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.rowSpan="2"
+                      GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.rowSpan="3"
                       style="-fx-control-inner-background: #222; -fx-text-fill: white;" prefHeight="150"/>
         </GridPane>
     </center>

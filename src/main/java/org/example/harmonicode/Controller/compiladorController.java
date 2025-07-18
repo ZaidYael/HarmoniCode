@@ -1,5 +1,7 @@
 package org.example.harmonicode.Controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import org.example.harmonicode.functions.Parser;
 import org.example.harmonicode.functions.Semantico;
 import org.example.harmonicode.models.Token;
@@ -28,6 +31,8 @@ public class compiladorController {
     @FXML
     private Label welcomeText;
     Semantico semantico = new Semantico();
+    analizadorLexico analizador = new analizadorLexico();
+    Parser parser;
     @FXML private CodeArea codigoTextArea;
     @FXML private Button btnNuevo;
     @FXML private Button btnAbrir;
@@ -132,48 +137,40 @@ public class compiladorController {
     }
     @FXML
     private void compilarCodigo() {
-
+        iniciales();
         String codigo = codigoTextArea.getText();
-        analizadorLexico analizador = new analizadorLexico();
         var tokens = analizador.analizar(codigo);
+        if(!(codigo.length()==0)) {
+            // ANÁLISIS LÉXICO
+            StringBuilder lexico = new StringBuilder();
+            lexico.append(String.format("%-15s %-15s %-5s %-7s%n", "Lexema", "Tipo", "Fila", "Columna"));
+            lexico.append("-------------------------------------------------------\n");
+            for (Token token : tokens) {
+                lexico.append(String.format("%-15s %-15s %-5d %-7d%n",
+                        token.getLexema(),
+                        token.getTipo(),
+                        token.getFila(),
+                        token.getColumna()
+                ));
+            }
 
-        // ANÁLISIS LÉXICO
-        StringBuilder lexico = new StringBuilder();
-        lexico.append(String.format("%-15s %-15s %-5s %-7s%n", "Lexema", "Tipo", "Fila", "Columna"));
-        lexico.append("-------------------------------------------------------\n");
-        for (Token token : tokens) {
-            lexico.append(String.format("%-15s %-15s %-5d %-7d%n",
-                    token.getLexema(),
-                    token.getTipo(),
-                    token.getFila(),
-                    token.getColumna()
-            ));
+            // ANÁLISIS SINTÁCTICO
+            parser = new Parser(tokens);
+            String sintactico = parser.parse();
+
+            // ANÁLISIS SEMÁNTICO
+            semantico.ejecucion.setLength(0);
+            String semanticoStr = semantico.analizar(tokens);
+
+            // RESULTADO COMPLETO
+            escribirresultado(lexicoArea, sintacticoArea, semanticoArea, lexico.toString(), sintactico, semanticoStr);
         }
-        lexicoArea.setText(lexico.toString());
-
-        // ANÁLISIS SINTÁCTICO
-        Parser parser = new Parser(tokens);
-        String sintactico = parser.parse();
-        sintacticoArea.setText(sintactico);
-
-        // ANÁLISIS SEMÁNTICO
-
-        semantico.ejecucion.setLength(0);
-        String semanticoStr = semantico.analizar(tokens);
-        btnEjecutar.setDisable(!semantico.state);
-        semanticoArea.setText(semanticoStr);
-
-        // RESULTADO COMPLETO
-
     }
 
     @FXML
     private void nuevoArchivo() {
         codigoTextArea.clear();
-        resultado.clear();
-        lexicoArea.clear();
-        sintacticoArea.clear();
-        semanticoArea.clear();
+        iniciales();
     }
 
     @FXML
@@ -181,6 +178,58 @@ public class compiladorController {
         String text = semantico.ejecucion.toString();
         System.out.println(semantico.ejecucion.toString());
         resultado.setText(text);
+    }
+    private void escribirresultado(TextArea lexicoArea, TextArea sintacticoArea, TextArea semanticoArea, String lexico, String sintactico, String semanticoStr) {
+        Timeline timeLexico = new Timeline();
+        Timeline timeSintactico = new Timeline();
+        Timeline timeSemantico = new Timeline();
+        timeSemantico.setOnFinished(e -> {
+            semanticoArea.setStyle("-fx-border-color: " + decideColor(semantico.state));
+            if(semantico.state && parser.state && analizador.state)
+                btnEjecutar.setDisable(false);
+            else
+                btnEjecutar.setDisable(true);
+        });
+        timeSintactico.setOnFinished(e -> {
+            timeSemantico.play();
+            sintacticoArea.setStyle("-fx-border-color: "+decideColor(parser.state));
+        });
+        timeLexico.setOnFinished(e -> {
+            timeSintactico.play();
+            lexicoArea.setStyle("-fx-border-color: "+decideColor(analizador.state));
+        });
+        escribirTexto(timeLexico,lexicoArea,lexico,Duration.millis(5));
+        escribirTexto(timeSintactico,sintacticoArea,sintactico,Duration.millis(10));
+        escribirTexto(timeSemantico,semanticoArea,semanticoStr,Duration.millis(10));
+        timeLexico.play();
+
+    }
+    private String decideColor(boolean state){
+        String color = "";
+        if(state)
+            color="rgb(0,255,0);";
+        else
+            color="rgb(255,0,0);";
+        return color;
+    }
+    public void escribirTexto(Timeline time,TextArea label, String mensaje, Duration delay) {
+        for (int i = 0; i <= mensaje.length(); i++) {
+            final int index = i;
+            KeyFrame keyFrame = new KeyFrame(delay.multiply(i), e -> {
+                label.setText(mensaje.substring(0, index));
+            });
+            time.getKeyFrames().add(keyFrame);
+        }
+    }
+    private void iniciales(){
+        lexicoArea.setStyle("-fx-border-color: white");
+        sintacticoArea.setStyle("-fx-border-color: white");
+        semanticoArea.setStyle("-fx-border-color: white");
+        lexicoArea.setText("");
+        sintacticoArea.setText("");
+        semanticoArea.setText("");
+        resultado.setText("");
+        btnEjecutar.setDisable(true);
     }
 }
 
