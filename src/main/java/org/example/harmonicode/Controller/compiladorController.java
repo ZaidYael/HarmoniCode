@@ -2,6 +2,7 @@ package org.example.harmonicode.Controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -198,7 +199,7 @@ public class compiladorController {
             timeSintactico.play();
             lexicoArea.setStyle("-fx-border-color: "+decideColor(analizador.state));
         });
-        escribirTexto(timeLexico,lexicoArea,lexico,Duration.millis(5));
+        escribirTexto(timeLexico,lexicoArea,lexico,Duration.millis(2));
         escribirTexto(timeSintactico,sintacticoArea,sintactico,Duration.millis(10));
         escribirTexto(timeSemantico,semanticoArea,semanticoStr,Duration.millis(10));
         timeLexico.play();
@@ -217,6 +218,8 @@ public class compiladorController {
             final int index = i;
             KeyFrame keyFrame = new KeyFrame(delay.multiply(i), e -> {
                 label.setText(mensaje.substring(0, index));
+                label.positionCaret(label.getLength());  // Mover caret al final
+
             });
             time.getKeyFrames().add(keyFrame);
         }
