@@ -1,0 +1,9 @@
+registro a = b2e2;
+registro b = 4.5;
+registro co = a2.d2;
+registro aux = 4;
+
+transponer(a,b);
+modular(co,aux);
+invertir(a,co);
+rotar(co,aux);

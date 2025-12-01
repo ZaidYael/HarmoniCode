@@ -1,0 +1,69 @@
+.grid-pane {
+    -fx-vgap: 42;
+    -fx-padding: 20;
+    -fx-background-color: #1e1e1e; /* Fondo oscuro monocromático */
+}
+.borderPane{
+    -fx-background-color: #1e1e1e; /* Fondo oscuro monocromático */
+}
+.Btn {
+    -fx-background-color: #ffffff; /* Fondo blanco */
+    -fx-background-radius: 30px; /* Bordes redondeados */
+    -fx-border-radius: 30px;
+    -fx-border-width: 1;
+    -fx-border-color: #d4d4d4; /* Borde gris claro */
+
+    -fx-text-fill: #000000; /* Texto negro */
+
+    -fx-font-family: SansSerif; /* Fuente moderna */
+    -fx-font-weight: Bold; /* Texto en negrita */
+    -fx-font-size: 14px;
+
+    -fx-padding: 6 13 6 13;
+    -fx-cursor: hand;
+}
+
+.label{
+    -fx-text-fill: #ffffff;
+    -fx-font-family: SansSerif; /* Fuente moderna */
+    -fx-font-weight: Bold; /* Texto en negrita */
+}
+.Btn:hover {
+    -fx-background-color: #000000; /* Fondo negro al hacer hover */
+    -fx-text-fill: #ffffff; /* Texto blanco al hacer hover */
+}
+.code-area {
+    -fx-background-color: #e8e8e8; /* Fondo oscuro */
+    -fx-text-fill: #ffffff; /* Texto blanco */
+    -fx-highlight-fill: #c51313; /* Resaltado más claro */
+    -fx-font-family: "Consolas"; /* Fuente de código */
+    -fx-font-size: 14px;
+    -fx-border-radius: 5px;
+}
+.code-area .styled-text-area .text {
+    -fx-fill: #ffffff;
+}
+.my-code-area .text {
+    -fx-fill: #ffffff !important;
+}
+.text-area {
+    -fx-font-family: "Consolas"; /* Fuente de código */
+    -fx-font-size: 14px;
+    -fx-control-inner-background: #252526; /* Fondo oscuro */
+    -fx-text-fill: #d4d4d4; /* Texto gris claro */
+    -fx-highlight-fill: #3c3c3c; /* Resaltado más claro */
+    -fx-highlight-text-fill: white;
+}
+
+.text-area:disabled {
+    -fx-opacity: 1;
+    -fx-control-inner-background: #1e1e1e; /* Fondo oscuro */
+    -fx-text-fill: #808080; /* Texto gris */
+    -fx-font-family: "Consolas";
+    -fx-font-size: 13px;
+}
+
+.keyword {
+    -fx-fill: #569cd6; /* Azul moderno para palabras clave */
+    -fx-font-weight: bold;
+}
